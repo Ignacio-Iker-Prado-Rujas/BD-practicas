@@ -1,38 +1,40 @@
+%Practica 1 de la asignatura de Bases de Datos, Enrique Ballesteros e Iker Prado
+%Nota: Se suprimen las tildes por incompatibilida con repositorio subversion (o algo asi)
 
 /abolish %Limpiamos la base de datos
 
 %Tabla de los programadores de la empresa
-create table programadores(dni string primary key, nombre string, dirección string, teléfono string);
-insert into programadores values('1', 'Jacinto', 'Jazmín 4', '91-8888888');
+create table programadores(dni string primary key, nombre string, direccion string, telefono string);
+insert into programadores values('1', 'Jacinto', 'Jazmin 4', '91-8888888');
 insert into programadores values('2', 'Herminia', 'Rosa 4', '91-7777777');
 insert into programadores values('3', 'Calixto', 'Clavel 3', '91-1231231');
 insert into programadores values('4', 'Teodora', 'Petunia 3', '91-6666666');
 
 %Tablas de los analistas de la empresa
-create table analistas(dni string primary key, nombre string, dirección string, teléfono string);
+create table analistas(dni string primary key, nombre string, direccion string, telefono string);
 insert into analistas values('4', 'Teodora', 'Petunia 3', '91-6666666');
 insert into analistas values('5', 'Evaristo', 'Luna 1', '91-1111111');
-insert into analistas values('6', 'Luciana', 'Júpiter 2', '91-8888888');
-insert into analistas values('7', 'Nicodemo', 'Plutón 3', NULL);
+insert into analistas values('6', 'Luciana', 'Jupiter 2', '91-8888888');
+insert into analistas values('7', 'Nicodemo', 'Pluton 3', NULL);
 
-%Tabla de la organización de los proyectos
-create table distribución(códigopr string , dniemp string, horas int);
-insert into distribución values('P1','1', 10);
-insert into distribución values('P1', '2', 40);
-insert into distribución values('P1', '4', 5);
-insert into distribución values('P2', '4', 10);
-insert into distribución values('P3', '1', 10);
-insert into distribución values('P3', '3', 40);
-insert into distribución values('P3', '4', 5);
-insert into distribución values('P3', '5', 30);
-insert into distribución values('P4', '4', 20);
-insert into distribución values('P4', '5', 10);
+%Tabla de la organizacion de los proyectos
+create table distribucion(codigopr string , dniemp string, horas int);
+insert into distribucion values('P1','1', 10);
+insert into distribucion values('P1', '2', 40);
+insert into distribucion values('P1', '4', 5);
+insert into distribucion values('P2', '4', 10);
+insert into distribucion values('P3', '1', 10);
+insert into distribucion values('P3', '3', 40);
+insert into distribucion values('P3', '4', 5);
+insert into distribucion values('P3', '5', 30);
+insert into distribucion values('P4', '4', 20);
+insert into distribucion values('P4', '5', 10);
 
 %Tabla de proyectos y directores
-create table proyectos(código string, descripción string, dnidir string);
-insert into proyectos values('P1', 'Nómina', '4');
+create table proyectos(codigo string, descripcion string, dnidir string);
+insert into proyectos values('P1', 'Nomina', '4');
 insert into proyectos values('P2', 'Contabilidad', '4');
-insert into proyectos values('P3', 'Producción', '5');
+insert into proyectos values('P3', 'Produccion', '5');
 insert into proyectos values('P4', 'Clientes', '5');
 insert into proyectos values('P5', 'Ventas', '6');
 
@@ -45,11 +47,11 @@ programadores_analistas := programadores intersect analistas
 vista2 := project dni (programadores_analistas)
 
 %Ejercicio 3
-dni_empleados_trabajadores := ( project dniemp (distribución) ) union ( project dnidir (proyectos) )
+dni_empleados_trabajadores := ( project dniemp (distribucion) ) union ( project dnidir (proyectos) )
 vista3 := vista1 difference dni_empleados_trabajadores	
 
 %Ejercicio 4
-proyectos_empleados := ( project códigopr, dniemp (distribución) ) union ( project código, dnidir (proyectos) )
+proyectos_empleados := ( project codigopr, dniemp (distribucion) ) union ( project codigo, dnidir (proyectos) )
 codigo_dni_dni_analistas := proyectos_empleados product ( project dni (analistas) )
-proyectos_con_analistas := project códigopr ( select dniemp = dni (codigo_dni_dni_analistas) )
-lista_proyectos := project códigopr
+proyectos_con_analistas := project codigopr ( select dniemp = dni (codigo_dni_dni_analistas) )
+lista_proyectos := project codigopr
