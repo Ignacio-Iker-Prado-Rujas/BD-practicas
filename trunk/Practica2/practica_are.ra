@@ -1,60 +1,71 @@
+%Practica 2 de la asignatura de Bases de Datos, Enrique Ballesteros e Iker Prado
+
 
 /abolish %Limpiamos la base de datos
 
+
 %Tabla de los programadores de la empresa
-create table programadores(dni string primary key, nombre string, dirección string, teléfono string);
-insert into programadores values('1', 'Jacinto', 'Jazmín 4', '91-8888888');
+create table programadores(dni string primary key, nombre string, direccion string, telefono string);
+insert into programadores values('1', 'Jacinto', 'Jazmin 4', '91-8888888');
 insert into programadores values('2', 'Herminia', 'Rosa 4', '91-7777777');
 insert into programadores values('3', 'Calixto', 'Clavel 3', '91-1231231');
 insert into programadores values('4', 'Teodora', 'Petunia 3', '91-6666666');
 
 %Tablas de los analistas de la empresa
-create table analistas(dni string primary key, nombre string, dirección string, teléfono string);
+create table analistas(dni string primary key, nombre string, direccion string, telefono string);
 insert into analistas values('4', 'Teodora', 'Petunia 3', '91-6666666');
 insert into analistas values('5', 'Evaristo', 'Luna 1', '91-1111111');
-insert into analistas values('6', 'Luciana', 'Júpiter 2', '91-8888888');
-insert into analistas values('7', 'Nicodemo', 'Plutón 3', NULL);
+insert into analistas values('6', 'Luciana', 'Jupiter 2', '91-8888888');
+insert into analistas values('7', 'Nicodemo', 'Pluton 3', NULL);
 
-%Tabla de la organización de los proyectos
-create table distribución(códigopr string , dniemp string, horas int);
-insert into distribución values('P1','1', 10);
-insert into distribución values('P1', '2', 40);
-insert into distribución values('P1', '4', 5);
-insert into distribución values('P2', '4', 10);
-insert into distribución values('P3', '1', 10);
-insert into distribución values('P3', '3', 40);
-insert into distribución values('P3', '4', 5);
-insert into distribución values('P3', '5', 30);
-insert into distribución values('P4', '4', 20);
-insert into distribución values('P4', '5', 10);
+%Tabla de la organizacion de los proyectos
+create table distribucion(codigopr string , dniemp string, horas int);
+insert into distribucion values('P1','1', 10);
+insert into distribucion values('P1', '2', 40);
+insert into distribucion values('P1', '4', 5);
+insert into distribucion values('P2', '4', 10);
+insert into distribucion values('P3', '1', 10);
+insert into distribucion values('P3', '3', 40);
+insert into distribucion values('P3', '4', 5);
+insert into distribucion values('P3', '5', 30);
+insert into distribucion values('P4', '4', 20);
+insert into distribucion values('P4', '5', 10);
 
 %Tabla de proyectos y directores
-create table proyectos(código string, descripción string, dnidir string);
-insert into proyectos values('P1', 'Nómina', '4');
+create table proyectos(codigo string, descripcion string, dnidir string);
+insert into proyectos values('P1', 'Nomina', '4');
 insert into proyectos values('P2', 'Contabilidad', '4');
-insert into proyectos values('P3', 'Producción', '5');
+insert into proyectos values('P3', 'Produccion', '5');
 insert into proyectos values('P4', 'Clientes', '5');
 insert into proyectos values('P5', 'Ventas', '6');
 
 %Ejercicio 1
-
 vista1(dni) := project dni (analistas njoin programadores);
 
 %Ejercicio 2
-
-vista2(dni,horas) := group_by dniemp dniemp,sum(horas) true (distribución);
+vista2(dni,horas) := group_by dniemp dniemp,sum(horas) true (distribucion);
 
 %Ejercicio 3
-
 empleados := analistas union programadores;
-vista3(dni, nombre, proyecto) := project dni, nombre, códigopr (empleados ljoin dni=dniemp distribución);
+vista3(dni, nombre, proyecto) := project dni, nombre, codigopr (empleados ljoin dni=dniemp distribucion);
 
 %Ejercicio 4
-
-vista4(dni, nombre) := project dni, nombre ( select teléfono is null (empleados));
+vista4(dni, nombre) := project dni, nombre ( select telefono is null (empleados) );
 
 %Ejercicio 5
-
-horas_totales_por_proyecto(media) := group_by códigopr códigopr, avg(horas) true(distribución);
+horas_totales_por_proyecto(media) := group_by codigopr codigopr, avg(horas) true(distribucion);
 horas_por_empleados := group_by[] avg(dniemp) true(empleados);
 group_by[] avg() true(empleados);
+
+
+
+%Comprobamos las vistas:
+%select true (vista1);
+%select true (vista2);
+%select true (vista3);
+%select true (vista4);
+%select true (vista5);
+%select true (vista6);
+%select true (vista7);
+%select true (vista8);
+%select true (vista9);
