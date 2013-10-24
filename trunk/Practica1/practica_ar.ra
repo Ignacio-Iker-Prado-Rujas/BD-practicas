@@ -51,7 +51,10 @@ dni_empleados_trabajadores := ( project dniemp (distribucion) ) union ( project 
 vista3 := vista1 difference dni_empleados_trabajadores	
 
 %Ejercicio 4
-proyectos_empleados := ( project codigopr, dniemp (distribucion) ) union ( project codigo, dnidir (proyectos) )
-codigo_dni_dni_analistas := proyectos_empleados product ( project dni (analistas) )
-proyectos_con_analistas := project codigopr ( select dniemp = dni (codigo_dni_dni_analistas) )
-lista_proyectos := project codigopr
+proyectos_empleados :=  project codigopr, dniemp (distribucion) 
+codigo_dniemp_dni_analistas := proyectos_empleados product ( project dni (analistas) )
+proyectos_con_analistas := project codigopr ( select dniemp = dni (codigo_dniemp_dni_analistas) )
+lista_proyectos := project codigopr ( distribucion ) union project codigo( proyectos )
+vista4 := lista_proyectos difference proyectos_con_analistas
+
+%Ejercicio 5
