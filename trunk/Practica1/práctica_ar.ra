@@ -1,0 +1,77 @@
+%Practica 1 de la asignatura de Bases de Datos, Enrique Ballesteros e Iker Prado
+%Nota: Se suprimen las tildes por incompatibilida con repositorio subversion (o algo asi) petacas Iker
+
+/abolish %Limpiamos la base de datos
+
+%Tabla de los programadores de la empresa
+create table programadores(dni string primary key, nombre string, dirección string, teléfono string);
+insert into programadores values('1', 'Jacinto', 'Jazmin 4', '91-8888888');
+insert into programadores values('2', 'Herminia', 'Rosa 4', '91-7777777');
+insert into programadores values('3', 'Calixto', 'Clavel 3', '91-1231231');
+insert into programadores values('4', 'Teodora', 'Petunia 3', '91-6666666');
+
+%Tablas de los analistas de la empresa
+create table analistas(dni string primary key, nombre string, dirección string, teléfono string);
+insert into analistas values('4', 'Teodora', 'Petunia 3', '91-6666666');
+insert into analistas values('5', 'Evaristo', 'Luna 1', '91-1111111');
+insert into analistas values('6', 'Luciana', 'Jupiter 2', '91-8888888');
+insert into analistas values('7', 'Nicodemo', 'Pluton 3', NULL);
+
+%Tabla de la organizacion de los proyectos
+create table distribución(códigopr string , dniemp string, horas int);
+insert into distribución values('P1','1', 10);
+insert into distribución values('P1', '2', 40);
+insert into distribución values('P1', '4', 5);
+insert into distribución values('P2', '4', 10);
+insert into distribución values('P3', '1', 10);
+insert into distribución values('P3', '3', 40);
+insert into distribución values('P3', '4', 5);
+insert into distribución values('P3', '5', 30);
+insert into distribución values('P4', '4', 20);
+insert into distribución values('P4', '5', 10);
+
+%Tabla de proyectos y directores
+create table proyectos(código string, descripción string, dnidir string);
+insert into proyectos values('P1', 'Nomina', '4');
+insert into proyectos values('P2', 'Contabilidad', '4');
+insert into proyectos values('P3', 'Produccion', '5');
+insert into proyectos values('P4', 'Clientes', '5');
+insert into proyectos values('P5', 'Ventas', '6');
+
+%Ejercicio 1
+empleados := programadores union analistas
+vista1 := project dni (empleados)
+
+%Ejercicio 2
+programadores_analistas := programadores intersect analistas
+vista2 := project dni (programadores_analistas)
+
+%Ejercicio 3
+dni_empleados_trabajadores := ( project dniemp (distribución) ) union ( project dnidir (proyectos) )
+vista3 := vista1 difference dni_empleados_trabajadores	
+
+%Ejercicio 4
+proyectos_empleados :=  project códigopr, dniemp (distribución) 
+código_dniemp_dni_analistas := proyectos_empleados product ( project dni (analistas) )
+proyectos_con_analistas := project códigopr ( select dniemp = dni (código_dniemp_dni_analistas) )
+lista_proyectos := project códigopr ( distribución ) union project código( proyectos )
+vista4 := lista_proyectos difference proyectos_con_analistas
+
+%Ejercicio 5
+vista5 := ( project dnidir (proyectos) intersect project dni (analistas) ) difference project dni (programadores)
+
+%Ejercicio 6
+código_nombre_pr := project código, descripción ( proyectos )
+lista_final := project códigopr, nombre, horas ( select dni = dniemp( programadores product distribución ) )
+vista6 := project descripción, nombre, horas ( select códigopr = código ( lista_final product código_nombre_pr ) )
+
+%Ejercicio 7
+vista7 := project teléfono ( select teléfono = teléfono2 and dni <> dni2 ( rename empleados1(dni,nombre,dirección,teléfono)(empleados) product rename empleados2(dni2,nombre2,dirección2,teléfono2)(empleados) ) )
+
+select true(vista1);
+select true(vista2);
+select true(vista3);
+select true(vista4);
+select true(vista5);
+select true(vista6);
+select true(vista7);
