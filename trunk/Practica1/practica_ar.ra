@@ -1,5 +1,5 @@
 %Practica 1 de la asignatura de Bases de Datos, Enrique Ballesteros e Iker Prado
-%Nota: Se suprimen las tildes por incompatibilida con repositorio subversion (o algo asi)
+%Nota: Se suprimen las tildes por incompatibilida con repositorio subversion (o algo asi) petacas Iker
 
 /abolish %Limpiamos la base de datos
 
@@ -58,3 +58,12 @@ lista_proyectos := project codigopr ( distribucion ) union project codigo( proye
 vista4 := lista_proyectos difference proyectos_con_analistas
 
 %Ejercicio 5
+vista5 := ( project dnidir (proyectos) intersect project dni (analistas) ) difference project dni (programadores)
+
+%Ejercicio 6
+codigo_nombre_pr := project codigo, descripcion (proyectos)
+lista_final := project codigopr, nombre, horas ( select dni = dniemp( programadores product distribucion ) )
+vista6 := project descripcion, nombre, horas ( select codigopr = codigo ( lista_final product codigo_nombre_pr ) )
+
+%Ejercicio 7
+vista7 := project telefono ( select telefono = telefono2 and dni <> dni2 ( rename empleados1(dni,nombre,direccion,telefono)(empleados) product rename empleados2(dni2,nombre2,direccion2,telefono2)(empleados) ) )
