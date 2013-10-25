@@ -53,9 +53,12 @@ vista3(dni, nombre, proyecto) := project dni, nombre, codigopr (empleados ljoin 
 vista4(dni, nombre) := project dni, nombre ( select telefono is null (empleados) );
 
 %Ejercicio 5
-horas_totales_por_proyecto(media) := group_by codigopr codigopr, avg(horas) true(distribucion);
-horas_por_empleados := group_by[] avg(dniemp) true(empleados);
-group_by[] avg() true(empleados);
+hora_media_por_empleado(proyectos, horas_por_emp) := group_by codigopr codigopr, avg(horas) true(distribucion);
+media_total(media_final) := group_by [] avg(horas_por_emp) true(hora_media_por_empleado);
+trabajo_emp_por_proyectos(dniemp, horas_medias) := group_by dniemp dniemp, avg(horas) true(distribucion);
+vista5 := project dniemp, horas_medias( select horas_medias < media_final  (trabajo_emp_por_proyectos product media_total));
+
+%horas_por_empleados := group_by[] avg(dniemp) true(empleados);
 
 
 
