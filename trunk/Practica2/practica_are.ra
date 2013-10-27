@@ -67,7 +67,8 @@ proyectos_evaristo := project codigopr (dni_evaristo njoin distribucion);
 vista7(dni) := ( project codigopr, dniemp (distribucion) ) division proyectos_evaristo; %Kike, esto de la division si que me funciona, que raro...
 
 %Ejercicio 8
-
+proyectos_evaristo_otro(codigo) := project codigopr (dni_evaristo njoin distribucion); 
+pruebita := proyectos_evaristo_otro fjoin codigo = codigopr distribucion;
 
 %Ejercicio 9
 
