@@ -59,21 +59,28 @@ media_total(media_final) := group_by [] avg(horas_por_proyecto) true(media_horas
 vista5(dni, numero) := project dniemp, media_horas( select media_horas < media_final  (trabajo_emp_por_proyectos product media_total));
 
 %Ejercicio 6
-
-
-%Ejercicio 7
 dni_evaristo(dniemp) := project dni (select nombre = 'Evaristo' (empleados));
+proyectos_evaristo (codigosev) := project codigopr ( select dniemp = dniev (distribucion product rename e(dniev)(dni_evaristo)));
+compis_evaristo (dni_compis) := project dniemp ( select codigopr = codigosev ( distribucion product proyectos_evaristo));
+libres_evaristo(dni_libres) := project dni ( empleados ) difference project dni_compis ( compis_evaristo);
+vista6(codigopr, dni, horas) := project codigopr, dniemp, horas*1.2 (select dniemp = dni_libres (distribucion product libres_evaristo)); 
+%Ejercicio 7
 proyectos_evaristo := project codigopr (dni_evaristo njoin distribucion); 
 vista7(dni) := ( project codigopr, dniemp (distribucion) ) division proyectos_evaristo; %Kike, esto de la division si que me funciona, que raro...
 
 %Ejercicio 8
-proyectos_evaristo_otro(codigo) := project codigopr (dni_evaristo njoin distribucion); 
-pruebita := proyectos_evaristo_otro fjoin codigo = codigopr distribucion;
+empleados_con_evaristo := project codigopr, dniemp (distribucion zjoin codigopr = p.codigopr_evaristo rename p(codigopr_evaristo)(proyectos_evaristo));
+numpr_evaristo (numprs_ev):= group_by [] count(codigopr) true(proyectos_evaristo);
+numpr_empleados (dni, numprs_emp) := group_by dniemp dniemp, count(codigopr) true (empleados_con_evaristo);
+vista8 := project dni ( select numprs_emp = numprs_ev (numpr_empleados product numpr_evaristo));
 
 %Ejercicio 9
+%Empezamos con el caso inicial:
+%codigos_evaristo(prs_evaristo) := project codigo ( select dnidir = dniemp (proyectos product dni_evaristo) );
+%prueba9 := project dniemp ( select codigopr = prs_evaristo ( distribucion product codigos_evaristo ) );
 
-
-
+prueba9 := project dniemp ( select codigopr = codigo ( distribucion product project codigo ( select dnidir = dniemp (proyectos product dni_evaristo) ) ) );
+vista9(dni) := select true(prueba9) union project dniemp ( select codigopr = codigo ( distribucion product project codigo ( select dnidir = dniemp (proyectos product prueba9) ) ) );
 
 %Comprobamos las vistas:
 select true (vista1);
@@ -81,7 +88,7 @@ select true (vista2);
 select true (vista3);
 select true (vista4);
 select true (vista5);
-%select true (vista6);
+select true (vista6);
 select true (vista7);
-%select true (vista8);
-%select true (vista9);
+select true (vista8);
+select true (vista9);
