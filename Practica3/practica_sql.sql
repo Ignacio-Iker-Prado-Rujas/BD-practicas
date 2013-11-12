@@ -39,7 +39,8 @@ insert into proyectos values('P4','Clientes','5');
 insert into proyectos values('P5','Ventas','6');
 
 %Ejercicio 1
-
+create view empleados as select * from programadores union select * from analistas
+create view vista01 as select dni from empleados
 
 %Ejercicio 2
 
@@ -57,7 +58,7 @@ insert into proyectos values('P5','Ventas','6');
 
 
 %Ejercicio 7
-
+create view vista07 as select distinct teléfono from  empleados as e1, empleados as e2 where e1.teléfono = e2.teléfono and e1.dni <> e2.dni
 
 %Ejercicio 8
 
