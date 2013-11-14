@@ -5,37 +5,37 @@
 
 
 %Tabla de los programadores de la empresa
-create table programadores(dni string primary key, nombre string, direccion string, telefono string);
-insert into programadores values('1', 'Jacinto', 'Jazmin 4', '91-8888888');
+create table programadores(dni string primary key, nombre string, dirección string, teléfono string);
+insert into programadores values('1', 'Jacinto', 'Jazmín 4', '91-8888888');
 insert into programadores values('2', 'Herminia', 'Rosa 4', '91-7777777');
 insert into programadores values('3', 'Calixto', 'Clavel 3', '91-1231231');
 insert into programadores values('4', 'Teodora', 'Petunia 3', '91-6666666');
 
 %Tablas de los analistas de la empresa
-create table analistas(dni string primary key, nombre string, direccion string, telefono string);
+create table analistas(dni string primary key, nombre string, dirección string, teléfono string);
 insert into analistas values('4', 'Teodora', 'Petunia 3', '91-6666666');
 insert into analistas values('5', 'Evaristo', 'Luna 1', '91-1111111');
-insert into analistas values('6', 'Luciana', 'Jupiter 2', '91-8888888');
-insert into analistas values('7', 'Nicodemo', 'Pluton 3', NULL);
+insert into analistas values('6', 'Luciana', 'Júpiter 2', '91-8888888');
+insert into analistas values('7', 'Nicodemo', 'Plutón 3', NULL);
 
 %Tabla de la organizacion de los proyectos
-create table distribucion(codigopr string , dniemp string, horas int);
-insert into distribucion values('P1','1', 10);
-insert into distribucion values('P1', '2', 40);
-insert into distribucion values('P1', '4', 5);
-insert into distribucion values('P2', '4', 10);
-insert into distribucion values('P3', '1', 10);
-insert into distribucion values('P3', '3', 40);
-insert into distribucion values('P3', '4', 5);
-insert into distribucion values('P3', '5', 30);
-insert into distribucion values('P4', '4', 20);
-insert into distribucion values('P4', '5', 10);
+create table distribución(códigopr string , dniemp string, horas int);
+insert into distribución values('P1','1', 10);
+insert into distribución values('P1', '2', 40);
+insert into distribución values('P1', '4', 5);
+insert into distribución values('P2', '4', 10);
+insert into distribución values('P3', '1', 10);
+insert into distribución values('P3', '3', 40);
+insert into distribución values('P3', '4', 5);
+insert into distribución values('P3', '5', 30);
+insert into distribución values('P4', '4', 20);
+insert into distribución values('P4', '5', 10);
 
 %Tabla de proyectos y directores
-create table proyectos(codigo string, descripcion string, dnidir string);
-insert into proyectos values('P1', 'Nomina', '4');
+create table proyectos(código string, descripción string, dnidir string);
+insert into proyectos values('P1', 'Nómina', '4');
 insert into proyectos values('P2', 'Contabilidad', '4');
-insert into proyectos values('P3', 'Produccion', '5');
+insert into proyectos values('P3', 'Producción', '5');
 insert into proyectos values('P4', 'Clientes', '5');
 insert into proyectos values('P5', 'Ventas', '6');
 
@@ -43,44 +43,44 @@ insert into proyectos values('P5', 'Ventas', '6');
 vista1(dni) := project dni (analistas njoin programadores);
 
 %Ejercicio 2
-vista2(dni,horas) := group_by dniemp dniemp,sum(horas) true (distribucion);
+vista2(dni,horas) := group_by dniemp dniemp,sum(horas) true (distribución);
 
 %Ejercicio 3
 empleados := analistas union programadores;
-vista3(dni, nombre, proyecto) := project dni, nombre, codigopr (empleados ljoin dni=dniemp distribucion);
+vista3(dni, nombre, proyecto) := project dni, nombre, códigopr (empleados ljoin dni=dniemp distribución);
 
 %Ejercicio 4
-vista4(dni, nombre) := project dni, nombre ( select telefono is null (empleados) );
+vista4(dni, nombre) := project dni, nombre ( select teléfono is null (empleados) );
 
 %Ejercicio 5
-trabajo_emp_por_proyectos(dniemp, media_horas) := group_by dniemp dniemp, avg(horas) true(distribucion);
-media_horas_por_proyecto(codigopr, horas_por_proyecto) := group_by codigopr codigopr, avg(horas) true(distribucion);
+trabajo_emp_por_proyectos(dniemp, media_horas) := group_by dniemp dniemp, avg(horas) true(distribución);
+media_horas_por_proyecto(códigopr, horas_por_proyecto) := group_by códigopr códigopr, avg(horas) true(distribución);
 media_total(media_final) := group_by [] avg(horas_por_proyecto) true(media_horas_por_proyecto);
 vista5(dni, numero) := project dniemp, media_horas ( select media_horas < media_final  (trabajo_emp_por_proyectos product media_total) );
 
 %Ejercicio 6
 dni_evaristo(dniemp) := project dni ( select nombre = 'Evaristo' (empleados) );
-proyectos_evaristo (codigosev) := project codigopr ( select dniemp = dniev ( distribucion product rename e(dniev)(dni_evaristo)) );
-compis_evaristo (dni_compis) := project dniemp ( select codigopr = codigosev ( distribucion product proyectos_evaristo));
+proyectos_evaristo (códigosev) := project códigopr ( select dniemp = dniev ( distribución product rename e(dniev)(dni_evaristo)) );
+compis_evaristo (dni_compis) := project dniemp ( select códigopr = códigosev ( distribución product proyectos_evaristo));
 libres_evaristo(dni_libres) := project dni ( empleados ) difference compis_evaristo;
-vista6(codigopr, dni, horas) := project codigopr, dniemp, horas*1.2 ( select dniemp = dni_libres (distribucion product libres_evaristo) ); 
+vista6(códigopr, dni, horas) := project códigopr, dniemp, horas*1.2 ( select dniemp = dni_libres (distribución product libres_evaristo) ); 
 
 %Ejercicio 7
-proyectos_evaristo := project codigopr (dni_evaristo njoin distribucion); 
-vista7(dni) := ( project codigopr, dniemp (distribucion) ) division proyectos_evaristo;
+proyectos_evaristo := project códigopr (dni_evaristo njoin distribución); 
+vista7(dni) := ( project códigopr, dniemp (distribución) ) division proyectos_evaristo;
 %Si se quiere que aparezcan solo los empleados distintos de Evaristo se utilizaria al final la operacion diferencia
 
 %Ejercicio 8
-empleados_con_evaristo := project codigopr, dniemp (distribucion zjoin codigopr = p.codigopr_evaristo rename p(codigopr_evaristo)(proyectos_evaristo));
-numpr_evaristo (numprs_ev):= group_by [] count(codigopr) true(proyectos_evaristo);
-numpr_empleados (dni, numprs_emp) := group_by dniemp dniemp, count(codigopr) true (empleados_con_evaristo);
+empleados_con_evaristo := project códigopr, dniemp (distribución zjoin códigopr = p.códigopr_evaristo rename p(códigopr_evaristo)(proyectos_evaristo));
+numpr_evaristo (numprs_ev):= group_by [] count(códigopr) true(proyectos_evaristo);
+numpr_empleados (dni, numprs_emp) := group_by dniemp dniemp, count(códigopr) true (empleados_con_evaristo);
 vista8(dni) := project dni ( select numprs_emp = numprs_ev (numpr_empleados product numpr_evaristo));
 %Lo mismo seria vista8(dni) := project dni (numpr_empleados zjoin numprs_emp = numprs_ev numpr_evaristo); 
 %Si se quiere que aparezcan solo los empleados distintos de Evaristo se utilizaria al final la operacion diferencia
 
 %Ejercicio 9
-subordinados_evaristo := project dniemp ( select codigopr = codigo ( distribucion product project codigo ( select dnidir = dniemp (proyectos product dni_evaristo) ) ) );
-vista9(dni) := select true(subordinados_evaristo) union project dniemp ( select codigopr = codigo ( distribucion product project codigo ( select dnidir = dniemp (proyectos product subordinados_evaristo) ) ) );
+subordinados_evaristo := project dniemp ( select códigopr = código ( distribución product project código ( select dnidir = dniemp (proyectos product dni_evaristo) ) ) );
+vista9(dniemp) := subordinados_evaristo union select true(vista9) union project dniemp ( select códigopr = código ( distribución product project código ( select dnidir = dniemp (proyectos product vista9) ) ) );
 
 
 %Comprobamos las vistas:
