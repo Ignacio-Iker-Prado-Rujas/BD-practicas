@@ -1,7 +1,8 @@
-%Practica 3 de la asignatura de Bases de Datos, Enrique Ballesteros e Iker Prado
+--Practica 3 de la asignatura de Bases de Datos, Enrique Ballesteros e Iker Prado
 
-/abolish 		-- Limpiamos la base de datos
-
+		-- Limpiamos la base de datos
+/abolish
+/multiline on
 
 -- Tabla de los programadores de la empresa
 create table programadores(dni string primary key, nombre string, dirección string, teléfono string);
@@ -39,56 +40,190 @@ insert into proyectos values('P4','Clientes','5');
 insert into proyectos values('P5','Ventas','6');
 
 -- Ejercicio 1
-create view empleados as select * from programadores union select * from analistas;
-create view vista1 as select dni from empleados;
+create view empleados as
+ select * from programadores
+  union 
+ select * from analistas;
+ 
+create view vista1(dni) as
+ select dni
+ from empleados;
 
 -- Ejercicio 2
-create view vista2 as select dni from (select * from programadores intersect select * from analistas);
+create view vista2(dni) as
+ select dni
+ from (select * from programadores 
+ 	intersect
+	select * from analistas);
 
 -- Ejercicio 3
-create view empleados_trabajando as select dniEmp as dni from distribución union select dniDir as dni from proyectos; -- En realidad no es necesario renombrar a dni, pero es mas claro
-create view vista3 as select dni from empleados except select * from empleados_trabajando;
+create view empleados_trabajando as
+ select dniEmp as dni 
+ from distribución
+  union 
+ select dniDir as dni 
+ from proyectos;
+ 
+create view vista3(dni) as 
+ select dni
+ from empleados 
+  except 
+ select * 
+ from empleados_trabajando;
 
 -- Ejercicio 4
-create view proyectos_con_analistas as select códigoPr from distribución , analistas where dniEmp = dni;
-create view vista4 as select código from proyectos except select códigoPr from proyectos_con_analistas;
+create view proyectos_con_analistas as
+ select códigoPr
+ from distribución , analistas
+ where dniEmp = dni;
+ 
+create view vista4(código) as
+ select código
+ from proyectos
+  except 
+ select códigoPr 
+ from proyectos_con_analistas;
 
 -- Ejercicio 5
-create view vista5 as select dniDir as dni from (select dniDir from proyectos intersect select dni from analistas) except select dni from programadores;
+create view vista5(dni) as 
+ select dniDir 
+ from (select dniDir 
+ 	from proyectos 
+ 	 intersect 
+ 	select dni from analistas) 
+  except 
+ select dni 
+ from programadores;
 
 -- Ejercicio 6
-create view vista6 as select descripción, nombre, horas from proyectos, distribución, programadores where dniEmp = dni and código = códigoPr;
+create view vista6(descripción, nombre, horas) as
+ select descripción, nombre, horas
+ from proyectos, distribución, programadores 
+ where dniEmp = dni and código = códigoPr;
 
 -- Ejercicio 7
-create view vista7 as select distinct teléfono from  empleados as e1, empleados as e2 where e1.teléfono = e2.teléfono and e1.dni <> e2.dni;
+create view vista7(teléfono) as 
+ select teléfono 
+ from  empleados as e1, empleados as e2 
+ where e1.teléfono = e2.teléfono and e1.dni <> e2.dni;
 
 -- Ejercicio 8
-create view vista8 as select dni from analistas natural inner join programadores;
+create view vista8(dni) as 
+ select dni 
+ from analistas natural inner join programadores;
 
 -- Ejercicio 9
--- ARREGLAR!!!!! 
-create view vista9 as select dniEmp, sum(horas) as horas from distribución group by dniEmp;
+create view vista9(dni, horas) as
+ select dniEmp, sum(horas)
+ from distribución
+ group by dniEmp;
 
 -- Ejercicio 10
-
+create view vista10(dni, nombre, proyecto) as
+ select dni, nombre, códigoPr
+ from empleados left join distribución on empleados.dni=distribución.dniEmp;
 
 -- Ejercicio 11
-
+create view vista11(dni, nombre) as
+ select dni, nombre
+ from empleados
+ where teléfono is null;
 
 -- Ejercicio 12
+create view media_horas_por_empleado(dniEmp, media_horas) as
+ select dniEmp, avg(horas)
+ from distribución
+ group by dniEmp;
+ 
+create view media_horas_por_proyecto(códigoPr, horas_por_proyecto) as
+ select códigoPr, avg(horas)
+ from distribución
+ group by códigoPr;
+ 
+create view media(media_total) as
+  select avg(horas_por_proyecto)
+  from media_horas_por_proyecto;
 
-
+create view vista12(dni, número) as
+ select dniEmp, media_horas
+ from (select *
+ 	from media_horas_por_empleado, media
+ 	where media_horas < media_total);
+ 
 -- Ejercicio 13
 
+create view dni_evaristo(dniEv) as
+ select dni
+ from empleados
+ where nombre='Evaristo';
 
+create view pr_con_evaristo(codigosEv) as
+ select códigoPr 
+ from distribución, dni_evaristo
+ where dniEmp = dniEv;
+ 
+create view conEvaristo(dni_conEvaristo) as
+ select dniEmp
+ from distribución, pr_con_evaristo
+ where códigoPr=codigosEv;
+ 
+create view sin_evaristo(dni_sinEv) as
+ select dni
+ from empleados
+  except
+ select dni_conEvaristo
+ from conEvaristo;
+
+create view vista13(códigoPr, dni, horas) as
+ select códigoPr, dniEmp, horas*1.2
+ from distribución, sin_evaristo
+ where dniEmp=dni_sinEv;
+ 
 -- Ejercicio 14
 
+create view vista14(dni) as
+ select dniEmp
+ from ( 	select códigoPr, dniEmp
+ 	from distribución
+  	 division
+ 	select codigosEv as códigoPr
+	from pr_con_evaristo);
 
 -- Ejercicio 15
 
+create view proy_y_emp_con_evaristo(dniEmp, códigoPr) as
+ select dniEmp, códigoPr
+ from (	distribución
+ 	 inner join 
+ 	pr_con_evaristo
+	on distribución.códigoPr = pr_con_evaristo.codigosEv );
 
+create view num_prs_evaristo(num_prs) as
+ select count(codigosEv)
+ from pr_con_evaristo;
+ 
+create view dni_numPrsEmpleados(dni, numPrs) as
+ select dniEmp, count(códigoPr)
+ from proy_y_emp_con_evaristo
+ group by dniEmp;
+ 
+create view vista15(dni) as
+ select dni
+ from dni_numPrsEmpleados, num_prs_evaristo
+ where numPrs = num_prs;
+ 
 -- Ejercicio 16
 
+create view vista16(dni) as
+ select dniEv as dni
+ from dni_evaristo
+  union
+ select dni
+ from vista9
+  union
+ select dniEmp as dni
+ from distribución, proyectos, vista9
+ where dniDir = dni and códigoPr=código;
 
 
 select * from vista1; 
