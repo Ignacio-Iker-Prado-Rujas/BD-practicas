@@ -30,7 +30,7 @@ CREATE TABLE Horarios (
 );
 
 CREATE TABLE Platos (
-  restaurante Number(8),
+  restaurante Number(8) REFERENCES Restaurantes(codigo) ON DELETE CASCADE,
   nombre Char(20),
   precio Number(8,2),
   descripcion Char(30),
@@ -78,8 +78,8 @@ CREATE TABLE Contiene (
 );
 
 CREATE TABLE AplicadoA(
-	descuento number(8),
-	pedido number(8),
+	descuento number(8) REFERENCES Descuentos(codigo) ON DELETE CASCADE,
+	pedido number(8)REFERENCES Pedidos(codigo) ON DELETE CASCADE,
 	PRIMARY KEY(descuento, pedido)
 );
 	
