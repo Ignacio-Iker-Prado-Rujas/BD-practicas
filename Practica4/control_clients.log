@@ -1,0 +1,8 @@
+
+SQL*Loader: Release 11.2.0.1.0 - Production on Vie Nov 22 17:41:59 2013
+
+Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
+
+SQL*Loader-500: No se ha podido abrir el archivo (control_clients.txt)
+SQL*Loader-553: archivo no encontrado
+SQL*Loader-509: Error del sistema: El sistema no puede encontrar el archivo especificado.

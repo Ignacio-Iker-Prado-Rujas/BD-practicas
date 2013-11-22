@@ -78,6 +78,12 @@ CREATE TABLE Contiene (
   FOREIGN KEY (restaurante, plato) REFERENCES Platos(restaurante, nombre) ON DELETE CASCADE
 );
 
+CREATE TABLE AplicadoA(
+	descuento number(8),
+	pedido number(8),
+	PRIMARY KEY(descuento, pedido)
+);
+
 CREATE INDEX I_CatPlatos ON Platos(categoria);
 CREATE SEQUENCE Seq_CodPedidos INCREMENT BY 1 START WITH 1
 NOMAXVALUE;

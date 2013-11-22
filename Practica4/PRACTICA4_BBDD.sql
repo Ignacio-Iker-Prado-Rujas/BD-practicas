@@ -55,7 +55,7 @@ CREATE TABLE Clientes (
 CREATE TABLE Descuentos (
   codigo Number(8) PRIMARY KEY,
   fecha_caducidad Date NOT NULL,
-  "porcentaje descuento" Number(3) NOT NULL CHECK ("porcentaje descuento" >0 AND "porcentaje descuento"<=100)
+  "porcentaje descuento" Number(3) NOT NULL CHECK ("porcentaje descuento" > 0 AND "porcentaje descuento"<=100)
 );
 
 CREATE TABLE Pedidos (
@@ -64,8 +64,7 @@ CREATE TABLE Pedidos (
   fecha_hora_pedido Date NOT NULL,
   fecha_hora_entrega Date,
   "importe total" Number(8,2),
-  cliente Char(9) NOT NULL REFERENCES Clientes(DNI) ON DELETE CASCADE,
-  codigoDescuento Number(8) REFERENCES Descuentos(codigo) ON DELETE SET NULL
+  cliente Char(9) NOT NULL REFERENCES Clientes(DNI),
 );
 
 CREATE TABLE Contiene (
@@ -78,6 +77,13 @@ CREATE TABLE Contiene (
   FOREIGN KEY (restaurante, plato) REFERENCES Platos(restaurante, nombre) ON DELETE CASCADE
 );
 
+CREATE TABLE AplicadoA(
+	descuento number(8),
+	pedido number(8),
+	PRIMARY KEY(descuento, pedido)
+);
+	
+
 CREATE INDEX I_CatPlatos ON Platos(categoria);
-CREATE SEQUENCE Seq_CodPedidos INCREMENT BY 1 START WITH 1
+CREATE SEQUENCE Seq_CodPedidos INCREMENT BY 1 START WITH 0
 NOMAXVALUE;
