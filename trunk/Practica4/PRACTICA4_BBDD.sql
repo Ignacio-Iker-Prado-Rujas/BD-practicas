@@ -16,13 +16,13 @@ CREATE TABLE Restaurantes(
   ); 
 
 CREATE TABLE "Areas Cobertura" (
-  restaurante Number(8) REFERENCES Restaurantes(codigo),
+  restaurante Number(8) REFERENCES Restaurantes(codigo) ON DELETE CASCADE,
   "codigo postal" Char(5),
   PRIMARY KEY(restaurante, "codigo postal")
   );
 
 CREATE TABLE Horarios (
-  restaurante Number(8) REFERENCES Restaurantes(codigo),
+  restaurante Number(8) REFERENCES Restaurantes(codigo) ON DELETE CASCADE,
   "dia semana" Char(1) NOT NULL,
   hora_apertura Date NOT NULL,
   hora_cierre Date NOT NULL,
@@ -48,17 +48,23 @@ CREATE TABLE Clientes (
   localidad Char(15),
   "codigo postal" Char(5) NOT NULL,
   telefono Char(9),
-  usuario Char(8) NOT NULL,
-  contraseña Char(8) NOT NULL
+  usuario Char(8) UNIQUE NOT NULL,
+  contraseña Char(8) DEFAULT 'Nopass'
+);
+
+CREATE TABLE Descuentos (
+  codigo Number(8) PRIMARY KEY,
+  fecha_caducidad Date NOT NULL,
+  "porcentaje descuento" Number(3) NOT NULL CHECK ("porcentaje descuento" >0 AND "porcentaje descuento"<=100)
 );
 
 CREATE TABLE Pedidos (
   codigo Number(8) PRIMARY KEY,
-  estado Char(9) NOT NULL,
+  estado Char(9) DEFAULT 'REST',
   fecha_hora_pedido Date NOT NULL,
   fecha_hora_entrega Date,
   "importe total" Number(8,2),
-  cliente Char(9) NOT NULL REFERENCES Clientes(DNI),
+  cliente Char(9) NOT NULL REFERENCES Clientes(DNI) ON DELETE CASCADE,
   codigoDescuento Number(8) REFERENCES Descuentos(codigo) ON DELETE SET NULL
 );
 
@@ -69,13 +75,7 @@ CREATE TABLE Contiene (
   "precio con comision" Number(8,2),
   unidades Number(4) NOT NULL,
   PRIMARY KEY (restaurante, plato, pedido),
-  FOREIGN KEY (restaurante, plato) REFERENCES Platos(restaurante, nombre)
-);
-
-CREATE TABLE Descuentos (
-  codigo Number(8) PRIMARY KEY,
-  fecha_caducidad Date NOT NULL,
-  "porcentaje descuento" Number(3) NOT NULL CHECK ("porcentaje descuento" >0 AND "porcentaje descuento"<=100)
+  FOREIGN KEY (restaurante, plato) REFERENCES Platos(restaurante, nombre) ON DELETE CASCADE
 );
 
 CREATE INDEX I_CatPlatos ON Platos(categoria);
