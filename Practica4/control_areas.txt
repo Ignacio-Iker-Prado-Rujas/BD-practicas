@@ -4,4 +4,4 @@ INFILE 'areas.txt'
 INTO TABLE "Areas Cobertura"
 APPEND 
 FIELDS TERMINATED BY ';' 
-(restaurante, "codigo postal")
+TRAILING NULLCOLS (restaurante, "codigo postal")
