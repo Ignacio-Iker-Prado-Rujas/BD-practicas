@@ -1,5 +1,5 @@
 
-SQL*Loader: Release 11.2.0.1.0 - Production on Vie Nov 22 17:26:45 2013
+SQL*Loader: Release 11.2.0.1.0 - Production on Mar Nov 26 19:03:29 2013
 
 Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
 
@@ -19,6 +19,7 @@ Ruta de acceso utilizada:      Convencional
 
 Tabla HORARIOS, cargada de cada registro lógico.
 Opción INSERT activa para esta tabla: APPEND
+Opción TRAILING NULLCOLS activada
 
    Nombre Columna               Posición   Long  Term Entorno Tipo de Dato
 ------------------------------ ---------- ----- ---- ---- ---------------------
@@ -27,55 +28,10 @@ RESTAURANTE                         FIRST     *   ;       CHARACTER
 HORA_APERTURA                        NEXT     *   ;       DATE HH24:MI         
 HORA_CIERRE                          NEXT     *   ;       DATE HH24:MI         
 
-Registro 1: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 2: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 3: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 4: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 5: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 6: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 7: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 8: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 9: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 10: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 11: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 12: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 13: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 14: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
-Registro 15: Rechazado - Error en tabla HORARIOS.
-ORA-00001: restricción única (BDD15.SYS_C0013082) violada
-
 
 Tabla HORARIOS:
-  1 Fila se ha cargado correctamente.
-  15 Filas no cargada debido a errores de datos.
+  16 Filas se ha cargado correctamente.
+  0 Filas no cargada debido a errores de datos.
   0 Filas no cargada porque todas las cláusulas WHEN han fallado.
   0 Filas no cargada porque todos los campos eran nulos.
 
@@ -85,11 +41,11 @@ Bytes de buffer de lectura: 1048576
 
 Total de registros lógicos ignorados:          0
 Total de registros lógicos leídos:          16
-Total de registros lógicos rechazados:        15
+Total de registros lógicos rechazados:         0
 Total de registros lógicos desechados:        0
 
-La ejecución empezó en Vie Nov 22 17:26:45 2013
-La ejecución terminó en Vie Nov 22 17:26:45 2013
+La ejecución empezó en Mar Nov 26 19:03:29 2013
+La ejecución terminó en Mar Nov 26 19:03:30 2013
 
-Tiempo transcurrido:     00:00:00.33
-Tiempo de CPU:         00:00:00.03
+Tiempo transcurrido:     00:00:00.10
+Tiempo de CPU:         00:00:00.02

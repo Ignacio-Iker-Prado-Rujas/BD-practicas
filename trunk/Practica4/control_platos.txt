@@ -4,4 +4,4 @@ INFILE 'platos.txt'
 INTO TABLE PLATOS
 APPEND 
 FIELDS TERMINATED BY ';' 
-(restaurante, nombre, precio, descripcion, categoria)
+TRAILING NULLCOLS (restaurante, nombre, precio, descripcion, categoria)

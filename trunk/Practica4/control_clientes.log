@@ -1,5 +1,5 @@
 
-SQL*Loader: Release 11.2.0.1.0 - Production on Vie Nov 22 17:39:51 2013
+SQL*Loader: Release 11.2.0.1.0 - Production on Mar Nov 26 16:36:50 2013
 
 Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
 
@@ -38,6 +38,9 @@ CONTRASEÑA                           NEXT     *   ;       CHARACTER
 Registro 1: Rechazado - Error en tabla CLIENTES.
 ORA-00001: restricción única (BDD15.SYS_C0013091) violada
 
+Registro 2: Rechazado - Error en tabla CLIENTES.
+ORA-00001: restricción única (BDD15.SYS_C0013091) violada
+
 Registro 3: Rechazado - Error en tabla CLIENTES.
 ORA-00001: restricción única (BDD15.SYS_C0013091) violada
 
@@ -46,8 +49,8 @@ ORA-00001: restricción única (BDD15.SYS_C0013091) violada
 
 
 Tabla CLIENTES:
-  1 Fila se ha cargado correctamente.
-  3 Filas no cargada debido a errores de datos.
+  0 Filas se ha cargado correctamente.
+  4 Filas no cargada debido a errores de datos.
   0 Filas no cargada porque todas las cláusulas WHEN han fallado.
   0 Filas no cargada porque todos los campos eran nulos.
 
@@ -57,11 +60,11 @@ Bytes de buffer de lectura: 1048576
 
 Total de registros lógicos ignorados:          0
 Total de registros lógicos leídos:           4
-Total de registros lógicos rechazados:         3
+Total de registros lógicos rechazados:         4
 Total de registros lógicos desechados:        0
 
-La ejecución empezó en Vie Nov 22 17:39:51 2013
-La ejecución terminó en Vie Nov 22 17:39:51 2013
+La ejecución empezó en Mar Nov 26 16:36:50 2013
+La ejecución terminó en Mar Nov 26 16:36:52 2013
 
-Tiempo transcurrido:     00:00:00.06
+Tiempo transcurrido:     00:00:02.07
 Tiempo de CPU:         00:00:00.03

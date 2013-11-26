@@ -4,4 +4,4 @@ INFILE 'restaurantes.txt'
 INTO TABLE RESTAURANTES
 APPEND 
 FIELDS TERMINATED BY ';' 
-(codigo, nombre, calle, "codigo postal", comision)
+TRAILING NULLCOLS (codigo, nombre, calle, "codigo postal", comision)

@@ -4,4 +4,4 @@ INFILE 'descuentos.txt'
 INTO TABLE DESCUENTOS
 APPEND 
 FIELDS TERMINATED BY ';' 
-(codigo, fecha_caducidad DATE 'DD-MM-YY', "porcentaje descuento")
+TRAILING NULLCOLS (codigo, fecha_caducidad DATE 'DD-MM-YY', "porcentaje descuento")

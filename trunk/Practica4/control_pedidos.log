@@ -1,5 +1,5 @@
 
-SQL*Loader: Release 11.2.0.1.0 - Production on Vie Nov 22 18:41:09 2013
+SQL*Loader: Release 11.2.0.1.0 - Production on Mar Nov 26 19:27:08 2013
 
 Copyright (c) 1982, 2009, Oracle and/or its affiliates.  All rights reserved.
 
@@ -47,8 +47,8 @@ Total de registros lógicos leídos:           9
 Total de registros lógicos rechazados:         0
 Total de registros lógicos desechados:        0
 
-La ejecución empezó en Vie Nov 22 18:41:09 2013
-La ejecución terminó en Vie Nov 22 18:41:09 2013
+La ejecución empezó en Mar Nov 26 19:27:08 2013
+La ejecución terminó en Mar Nov 26 19:27:08 2013
 
-Tiempo transcurrido:     00:00:00.09
-Tiempo de CPU:         00:00:00.03
+Tiempo transcurrido:     00:00:00.11
+Tiempo de CPU:         00:00:00.02

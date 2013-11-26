@@ -4,4 +4,4 @@ INFILE 'aplicadosA.txt'
 INTO TABLE APLICADOA
 APPEND 
 FIELDS TERMINATED BY ';' 
-(descuento, pedido)
+TRAILING NULLCOLS (descuento, pedido)

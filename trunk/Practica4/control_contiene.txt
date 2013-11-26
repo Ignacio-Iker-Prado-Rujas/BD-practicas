@@ -4,4 +4,4 @@ INFILE 'contiene.txt'
 INTO TABLE CONTIENE
 APPEND 
 FIELDS TERMINATED BY ';' 
-(restaurante, plato, pedido, "precio con comision", unidades)
+TRAILING NULLCOLS (restaurante, plato, pedido, "precio con comision", unidades)

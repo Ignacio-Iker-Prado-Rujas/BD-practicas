@@ -37,6 +37,7 @@ CREATE TABLE Platos (
   categoria Char(10),
   PRIMARY KEY(restaurante, nombre)
 );
+CREATE INDEX I_CatPlatos ON Platos(categoria);
 
 CREATE TABLE Clientes (
   DNI Char(9) PRIMARY KEY,
@@ -64,7 +65,7 @@ CREATE TABLE Pedidos (
   fecha_hora_pedido Date NOT NULL,
   fecha_hora_entrega Date,
   "importe total" Number(8,2),
-  cliente Char(9) NOT NULL REFERENCES Clientes(DNI),
+  cliente Char(9) NOT NULL REFERENCES Clientes(DNI)
 );
 
 CREATE TABLE Contiene (
@@ -78,12 +79,15 @@ CREATE TABLE Contiene (
 );
 
 CREATE TABLE AplicadoA(
-	descuento number(8) REFERENCES Descuentos(codigo) ON DELETE CASCADE,
-	pedido number(8)REFERENCES Pedidos(codigo) ON DELETE CASCADE,
+	descuento Number(8) REFERENCES Descuentos(codigo) ON DELETE CASCADE,
+	pedido Number(8)REFERENCES Pedidos(codigo) ON DELETE CASCADE,
 	PRIMARY KEY(descuento, pedido)
 );
 	
-
-CREATE INDEX I_CatPlatos ON Platos(categoria);
-CREATE SEQUENCE Seq_CodPedidos INCREMENT BY 1 START WITH 0
+CREATE SEQUENCE Seq_CodPedidos INCREMENT BY 1 START WITH 1
 NOMAXVALUE;
+
+CREATE TABLE DIAS(
+	dia Char(1) PRIMARY KEY,
+	nombre Char(10) NOT NULL
+);
