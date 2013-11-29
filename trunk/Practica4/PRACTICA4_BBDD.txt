@@ -40,7 +40,7 @@ CREATE TABLE Platos (
 CREATE TABLE Clientes (
   DNI Char(9) PRIMARY KEY,
   nombre Char(32) NOT NULL,
-  apellido Char(32) NOT NULL,
+  apellidos Char(32) NOT NULL,
   calle Char(20) NOT NULL,
   numero Number(4) NOT NULL,
   piso Char(5),
@@ -63,7 +63,7 @@ CREATE TABLE Pedidos (
   fecha_hora_pedido Date NOT NULL,
   fecha_hora_entrega Date,
   "importe total" Number(8,2),
-  cliente Char(9) NOT NULL REFERENCES Clientes(DNI),
+  cliente Char(9) NOT NULL REFERENCES Clientes(DNI)
 );
 
 CREATE TABLE Contiene (
