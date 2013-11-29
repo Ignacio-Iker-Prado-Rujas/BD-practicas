@@ -4,5 +4,5 @@ INFILE 'clientes.txt'
 INTO TABLE CLIENTES
 APPEND 
 FIELDS TERMINATED BY ';' 
-TRAILING NULLCOLS (DNI, nombre, apellido, calle, numero, piso, localidad,
+TRAILING NULLCOLS (DNI, nombre, apellidos, calle, numero, piso, localidad,
  "codigo postal", telefono, usuario, contraseña)
