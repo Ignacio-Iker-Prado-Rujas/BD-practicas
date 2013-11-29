@@ -42,7 +42,7 @@ CREATE INDEX I_CatPlatos ON Platos(categoria);
 CREATE TABLE Clientes (
   DNI Char(9) PRIMARY KEY,
   nombre Char(32) NOT NULL,
-  apellido Char(32) NOT NULL,
+  apellidos Char(32) NOT NULL,
   calle Char(20) NOT NULL,
   numero Number(4) NOT NULL,
   piso Char(5),
