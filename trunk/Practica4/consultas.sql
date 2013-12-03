@@ -30,3 +30,9 @@ SELECT CODIGO, ESTADO, FECHA_HORA_PEDIDO, FECHA_HORA_ENTREGA,"importe total", CL
 FROM PEDIDOS
 WHERE PEDIDOS."importe total" = (SELECT MAX("importe total")
                         FROM PEDIDOS);
+--7
+SELECT DNI, NOMBRE, APELLIDOS, "Valor medio pedidos"
+FROM CLIENTES, (  SELECT CLIENTE, AVG("importe total") AS "Valor medio pedidos"
+                   FROM PEDIDOS
+                   GROUP BY CLIENTE)
+WHERE DNI=CLIENTE
