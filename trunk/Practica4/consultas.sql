@@ -49,6 +49,6 @@ WHERE PRECIO>15 AND P.RESTAURANTE=CONT.RESTAURANTE AND P.NOMBRE=CONT.PLATO AND C
 --10
 SELECT DNI, NOMBRE, APELLIDOS, COUNT(RESTAURANTE) AS "Número restaurantes"
 FROM(SELECT DNI, NOMBRE, APELLIDOS, RESTAURANTE
-    FROM CLIENTES C, "Areas Cobertura" A
-    WHERE C."codigo postal"=A."codigo postal")
+    FROM CLIENTES LEFT OUTER JOIN "Areas Cobertura"
+    ON CLIENTES."codigo postal"="Areas Cobertura"."codigo postal" )                                          
 GROUP BY DNI, NOMBRE, APELLIDOS;
