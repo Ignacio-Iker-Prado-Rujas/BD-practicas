@@ -1,46 +1,42 @@
---BD- PRACTICA 6, ENRIQUE BALLESTEROS HORCAJO, IGNACIO IKER PRADO RUJAS
---Dudas: 1) Comision suma o porcentaje?
-		 2) If vs excepciones
-		 3) Minusculas en el apartado 1
-		 4) Bloque anonimo? Todo en un fichero?
+--BD- PRACTICA 5, ENRIQUE BALLESTEROS HORCAJO, IGNACIO IKER PRADO RUJAS
 --APARTADO 1:
 
 create or replace 
 PROCEDURE PEDIDOS_CLIENTE (DNI_CLIENTE CLIENTES.DNI%TYPE) 
 IS 
-  c_DNI         CLIENTES.DNI%TYPE;
-  c_NOMBRE      CLIENTES.NOMBRE%TYPE;
-  c_APELLIDOS   CLIENTES.APELLIDOS%TYPE;
-  c_CALLE       CLIENTES.CALLE%TYPE;
-  c_NUMERO      CLIENTES.NUMERO%TYPE;
-  c_PISO        CLIENTES.PISO%TYPE;
-  c_LOCALIDAD   CLIENTES.LOCALIDAD%TYPE;
-  c_POSTAL      CLIENTES."codigo postal"%TYPE;
-  c_TELEFONO    CLIENTES.TELEFONO%TYPE;
-  SUMA_IMPORTES NUMBER(12, 2) := 0;
-  NUM_PEDIDOS NUMBER := 0;
+  cDNI         CLIENTES.DNI%TYPE;
+  cNombre      CLIENTES.NOMBRE%TYPE;
+  cApellidos   CLIENTES.APELLIDOS%TYPE;
+  cCalle       CLIENTES.CALLE%TYPE;
+  cNumero      CLIENTES.NUMERO%TYPE;
+  cPiso        CLIENTES.PISO%TYPE;
+  cLocalidad   CLIENTES.LOCALIDAD%TYPE;
+  cPostal      CLIENTES."codigo postal"%TYPE;
+  cTelefono    CLIENTES.TELEFONO%TYPE;
+  suma_importes NUMBER(12, 2) := 0;
+  num_pedidos NUMBER := 0;
   CURSOR cursorPedidos IS 
    SELECT p.CODIGO, p.FECHA_HORA_PEDIDO, p.FECHA_HORA_ENTREGA, p.ESTADO, p."importe total"
    FROM PEDIDOS p
    WHERE DNI_CLIENTE = p.CLIENTE
    ORDER BY FECHA_HORA_PEDIDO ASC;
   pedidoCliente cursorPedidos%ROWTYPE;
-  NO_DNI EXCEPTION;
   NO_PEDIDOS EXCEPTION;
   
   BEGIN 
   SELECT CLIENTES.DNI, CLIENTES.NOMBRE, CLIENTES.APELLIDOS, CLIENTES.CALLE, CLIENTES.NUMERO, CLIENTES.PISO, CLIENTES.LOCALIDAD, CLIENTES."codigo postal", CLIENTES.TELEFONO
-  INTO c_DNI, c_NOMBRE, c_APELLIDOS, c_CALLE, c_NUMERO, c_PISO, c_LOCALIDAD, c_POSTAL, c_TELEFONO
+  INTO cDNI, cNombre, cApellidos, cCalle, cNumero, cPiso, cLocalidad, cPostal, cTelefono
   FROM CLIENTES
   WHERE DNI_CLIENTE = CLIENTES.DNI;
-  DBMS_OUTPUT.PUT_LINE(c_DNI || ', ' || c_NOMBRE || ', ' || c_APELLIDOS || ', ' || c_CALLE || ', ' || c_NUMERO || ', ' || c_PISO || ', ' ||  c_LOCALIDAD || ', ' || c_POSTAL || ', ' || c_TELEFONO);
+  DBMS_OUTPUT.PUT_LINE('DNI: ' || cDNI || '. Nombre y apellidos: ' || cNombre || ' ' || cApellidos);
+  DBMS_OUTPUT.PUT_LINE('Calle: ' || cCalle || ', Nº ' || cNumero || ', piso: ' || cPiso || ', localidad: ' ||  cLocalidad || ', CP: ' || cPostal || ', TLF: ' || cTelefono || chr(10));
   FOR pedidoCliente IN cursorPedidos LOOP
-   SUMA_IMPORTES := SUMA_IMPORTES + pedidoCliente."importe total"; 
-   NUM_PEDIDOS := NUM_PEDIDOS + 1;
+   suma_importes := suma_importes + pedidoCliente."importe total"; 
+   num_pedidos := num_pedidos + 1;
    DBMS_OUTPUT.PUT_LINE('Pedido ' || NUM_PEDIDOS || ': ' || pedidoCliente.CODIGO || ', ' || pedidoCliente.FECHA_HORA_PEDIDO || ', ' || pedidoCliente.FECHA_HORA_ENTREGA || ', ' || pedidoCliente.ESTADO || ', ' || pedidoCliente."importe total"  || chr(10)); 
   END LOOP; 
-  IF NUM_PEDIDOS > 0 THEN 
-    DBMS_OUTPUT.PUT_LINE('Suma de los importes de todos los pedidos de ' || DNI_CLIENTE || ': ' || SUMA_IMPORTES);
+  IF num_pedidos > 0 THEN 
+    DBMS_OUTPUT.PUT_LINE('Suma de los importes de todos los pedidos de ' || DNI_CLIENTE || ': ' || suma_importes);
   ELSE 
     RAISE NO_PEDIDOS; 
   END IF;
@@ -59,10 +55,12 @@ SET SERVEROUTPUT ON SIZE 1000000
 EXECUTE PEDIDOS_CLIENTE('12345678N');
 
 
---_______________________________________________________________________________________________
+-----------------------------------------------------------------------------------------------------------------
+
+
 --APARTADO 2:
 
-  create or replace 
+create or replace 
 PROCEDURE REVISA_PEDIDOS
 IS 
   CURSOR cursorContiene IS 
@@ -72,7 +70,7 @@ IS
   cContiene cursorContiene%ROWTYPE;
   precioPlato PLATOS.PRECIO%TYPE;
   comisionPlato RESTAURANTES.COMISION%TYPE;
-  NUM_CAMBIOS NUMBER := 0;
+  num_cambios NUMBER := 0;
   CURSOR cursorPedidos IS 
    SELECT *
    FROM PEDIDOS
@@ -92,15 +90,15 @@ IS
       INTO comisionPlato 
       FROM RESTAURANTES r
       WHERE cContiene.RESTAURANTE = r.CODIGO;
-    IF cContiene."precio con comision" <> precioPlato + comisionPlato THEN 
-      UPDATE CONTIENE SET "precio con comision" = precioPlato + comisionPlato 
+    IF cContiene."precio con comision" <> precioPlato + (precioPlato * comisionPlato / 100) THEN 
+      UPDATE CONTIENE SET "precio con comision" = precioPlato + (precioPlato * comisionPlato / 100) 
       WHERE CURRENT OF cursorContiene;
-      NUM_CAMBIOS := NUM_CAMBIOS + 1;
-      DBMS_OUTPUT.PUT_LINE('Precio con comision de ' || cContiene.PLATO || 'modificado: ' || (precioPlato + comisionPlato));
+      num_cambios := num_cambios + 1;
+      DBMS_OUTPUT.PUT_LINE('Precio con comision de ' || cContiene.PLATO || 'modificado: ' || (precioPlato + (precioPlato * comisionPlato / 100)));
     END IF;
   END LOOP; 
-  IF NUM_CAMBIOS > 0 THEN
-    DBMS_OUTPUT.PUT_LINE('Numero de filas modificadas en la tabla CONTIENE: '|| NUM_CAMBIOS);
+  IF num_cambios > 0 THEN
+    DBMS_OUTPUT.PUT_LINE(chr(10) || 'Numero de filas modificadas en la tabla CONTIENE: '|| NUM_CAMBIOS);
   ELSE
     DBMS_OUTPUT.PUT_LINE('Ningún cambio en los datos (de la tabla CONTIENE)');
   END IF;
@@ -117,17 +115,15 @@ IS
     IF cPedidos."importe total" <> importeTotal THEN 
       UPDATE PEDIDOS SET "importe total" = importeTotal 
       WHERE CURRENT OF cursorPedidos;
-      NUM_CAMBIOS := NUM_CAMBIOS + 1;
+      num_cambios := num_cambios + 1;
       DBMS_OUTPUT.PUT_LINE('Importe total del pedido con codigo ' || cPedidos.CODIGO || ' modificado: ' || importeTotal);
     END IF;
   END LOOP; 
-  IF NUM_CAMBIOS > 0 THEN
-    DBMS_OUTPUT.PUT_LINE('Numero de filas modificadas en la tabla PEDIDOS: '|| NUM_CAMBIOS);
+  IF num_cambios > 0 THEN
+    DBMS_OUTPUT.PUT_LINE(chr(10) || 'Numero de filas modificadas en la tabla PEDIDOS: '|| NUM_CAMBIOS);
   ELSE
     DBMS_OUTPUT.PUT_LINE('Ningún cambio en los datos (de la tabla PEDIDOS)');
-  END IF;
-  
-  --EXCEPTION 
+  END IF; 
    
 END; 
 
