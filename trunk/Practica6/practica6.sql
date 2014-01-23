@@ -6,34 +6,75 @@ CREATE TABLE REGISTRO_VENTAS (
   FECHA_ULT_PEDIDO DATE 
 ); 
 
+INSERT INTO REGISTRO_VENTAS VALUES (1234, 2, '17/2/09');
+INSERT INTO REGISTRO_VENTAS VALUES (2345, 2, '17/2/09');
+INSERT INTO REGISTRO_VENTAS VALUES (3456, 3, '16/2/09');
+INSERT INTO REGISTRO_VENTAS VALUES (5678, 2, '16/2/09');
 
 --------------------------------------------------------------------------------------------
 
 --APARTADO 2: 
 
-CREATE OR REPLACE TRIGGER CONTROL_DETALLE_PEDIDOS
-AFTER INSERT OR DELETE OR UPDATE ON PEDIDOS 
+CREATE OR REPLACE 
+TRIGGER CONTROL_DETALLE_PEDIDOS
+AFTER UPDATE OR DELETE
+ON PEDIDOS 
 FOR EACH ROW 
-begin 
-IF INSERTING THEN
-  UPDATE REGISTRO_VENTAS
-  SET (SELECT TOTAL_PEDIDOS
-      FROM REGISTRO_VENTAS R
-      WHERE R.COD_REST = NEW_REST) = ;
-  WHERE COD_REST = NEW_REST;
-            NEW_REST = SELECT RESTAURANTE
-                    FROM CONTIENE C, PEDIDOS P
-                    WHERE C.PEDIDO = NEW.CODIGO;
+DECLARE
+  CODIGO_RESTAURANTE  PEDIDOS.CODIGO%TYPE;
+  FECHA_ULTIMO_PEDIDO PEDIDOS.FECHA_HORA_ENTREGA%TYPE;
+  FECHA_NUEVA         PEDIDOS.FECHA_HORA_ENTREGA%TYPE;
+  CURSOR cursorPedidos IS 
+   SELECT :OLD.CODIGO, :OLD.FECHA_HORA_ENTREGA
+   FROM PEDIDOS P
+   WHERE CODIGO_RESTAURANTE = P.CODIGO
+   ORDER BY FECHA_HORA_PEDIDO DESC;
+  pedidoCliente cursorPedidos%ROWTYPE;
 
-  --actualizar importe total
-  --mirar si es el más antiguo  
-  --si es, actualizar fecha ult pedido pedido
-  --instrucciones que se ejecutan si el trigger saltó por borrar filas 
---ELSIF INSERTING THEN 
---instrucciones que se ejecutan si el trigger saltó por insertar filas 
--- ELSE
---  TOTAL_PEDIDOS := TOTAL_PEDIDOS + 1;
---instrucciones que se ejecutan si el trigger saltó por modificar filas 
-END IF 
-END;
+BEGIN 
+IF UPDATING THEN
+  --Guardamos el codigo del restaurante afectado
+  SELECT C.RESTAURANTE
+  INTO CODIGO_RESTAURANTE
+  FROM CONTIENE C, PEDIDOS P
+  WHERE C.PEDIDO = :OLD.CODIGO;
+  --Y la fecha tambien
+  SELECT P.FECHA_HORA_ENTREGA
+  INTO FECHA_NUEVA
+  FROM CONTIENE C, PEDIDOS P
+  WHERE C.PEDIDO = :NEW.CODIGO;
+  --Y la fecha del ultimo pedido en ese restaurante
+  --Como hemos ordenado el las filas por orden descendente (por fecha) la primera tiene la mayor
+  FETCH cursorPedidos INTO pedidoCliente;
+  --Comparo fechas y me quedo con la mayor
+  IF FECHA_NUEVA > pedidoCliente.FECHA_HORA_ENTREGA THEN 
+    FECHA_ULTIMO_PEDIDO := FECHA_NUEVA;
+  ELSE
+    FECHA_ULTIMO_PEDIDO := pedidoCliente.FECHA_HORA_ENTREGA;
+  END IF; 
+  --Y finalmente, actualizamos la fecha
+  UPDATE REGISTRO_VENTAS
+  SET FECHA_ULT_PEDIDO = FECHA_ULTIMO_PEDIDO
+  WHERE COD_REST = CODIGO_RESTAURANTE;
+
+ELSIF DELETING THEN 
+  UPDATE REGISTRO_VENTAS  
+  SET TOTAL_PEDIDOS = TOTAL_PEDIDOS - 1
+  WHERE COD_REST = CODIGO_RESTAURANTE;
+
+END IF;
+END;  
+
+
+--Prueba para el caso de UPDATE
+UPDATE PEDIDOS
+SET FECHA_HORA_ENTREGA = '20/1/14'
+WHERE CODIGO = '1';
+
+--Prueba para el caso de DELETE
+DELETE FROM PEDIDOS 
+WHERE CODIGO = '2';
+
+
+
 
