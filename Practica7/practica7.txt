@@ -83,18 +83,38 @@
 	¿Qué ha pasado? 
 	
 	-Que no ha cambiado el resultado a pesar del commit en T2.
-		Esto se debe a que
+		Esto se debe a que en realidad en T1 sigo en la misma
+		transacción que antes de modificar la tabla desde T2.
+		Y al estar en modo serializable durante la transacción
+		no cambia la lectura. Basta escribir 'commit' en T1 para
+		que al acabar la transacción anterior los datos me lleguen
+		actualizados. La otra opción es cambiar el nivel isolation.
 	5. En T1: 
-ALTER SESSION SET ISOLATION_LEVEL = READ COMMITTED; 
-6. En T1 : 
-SELECT SUM(saldo) FROM cuentas; 
-7. En T2 : 
-UPDATE cuentas SET saldo=saldo +100; 
-COMMIT; 
-8. En T1 : 
-SELECT SUM(saldo) FROM cuentas; 
-¿Qué ha pasado? Explicar si hay alguna diferencia según los niveles de aislamiento. 
+		ALTER SESSION SET ISOLATION_LEVEL = READ COMMITTED; 
+		
+	-A partir de ahora en cuanto se lea se liberarán los bloqueos.
+		
+	6. En T1 : 
+		SELECT SUM(saldo) FROM cuentas;
+		
+	-El saldo ya llega bien actualizado.
+		
+	7. En T2 : 
+		UPDATE cuentas SET saldo=saldo +100; 
+		COMMIT; 
+	8. En T1 : 
+		SELECT SUM(saldo) FROM cuentas; 
+	¿Qué ha pasado? Explicar si hay alguna diferencia según los niveles de aislamiento. 
  
+	-Ahora ha salido la suma actualizada. Como ya hemos explicado, ésto se debe al
+	nivel de aislamiento actual que no bloquea la lectura. En el nivel 'Read uncommited'
+	necesitaríamos ni esperar al commit del otro usuario, lo que podría llevarnos a leer
+	información sobre la que puede que se realice un rollback. En el nivel 'Repeatable
+	reads', estaríamos en el mismo caso que el nivel 'Serializable' para la modificación
+	de fila, la diferencia estaría en el caso de añadir nuevas filas que en este nivel sí
+	que aparecerían.
+	
+
 5. Transacciones 
 En una central de reservas de butacas para eventos (conciertos, ópera, cine, …) se desea desarrollar 
 una aplicación para que los clientes puedan reservar butacas en estos eventos. Se proporciona un script 
