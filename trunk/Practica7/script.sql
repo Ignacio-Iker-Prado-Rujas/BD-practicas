@@ -5,7 +5,7 @@ SET echo OFF;
 SET verify OFF;
 def v_evento='Circo';
 def v_fila='1';
-def v_columna='1';
+def v_columna='3';
 variable v_error char(20)
 /
 declare
@@ -28,7 +28,7 @@ begin
 end;
 /
 col SCRIPT_COL new_val SCRIPT
-select decode(:v_error,'false','"C:\fernan\docs\docencia\asignaturas\BD DG\2013-2014\Prácticas\6. Práctica 4 Oracle Transacciones\preguntar.sql"','"C:\fernan\docs\docencia\asignaturas\BD DG\2013-2014\Prácticas\6. Práctica 4 Oracle Transacciones\no_preguntar.sql"') as SCRIPT_COL from dual;
+select decode(:v_error,'false','"C:\hlocal\bd\Practica7\preguntar.sql"','"C:\hlocal\bd\Practica7\no_preguntar.sql"') as SCRIPT_COL from dual;
 print :v_error
 --prompt 'Valor script: '&SCRIPT
 @ &SCRIPT
