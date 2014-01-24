@@ -1,6 +1,6 @@
 												PRÁCTICA 7: BLOQUEOS Y TRANSACCIONES 
 														Bases de datos 
- 
+												Enrique Ballesteros e Iker Prado Rujas
 1. Bloqueos (Select) 
  
 	1. Desde Oracle SQL Developer, crear la siguiente tabla de cuentas, insertar tuplas y confirmarlas: 
@@ -12,6 +12,7 @@
 		INSERT INTO cuentas VALUES (123, 400); 
 		INSERT INTO cuentas VALUES (456, 300); 
 		COMMIT; 
+	
 	2. Abrir dos sesiones T1 y T2 de SQLPlus con tu usuario y contraseña 
 		Nota para SQLPlus: Oracle 11g R2 cliente: Menú Inicio ? Programas ? BBDD ? Oracle ? 
 		Consola de Oracle 11g 
@@ -125,6 +126,8 @@
 	comprueba que la butaca existe y consulta si no está reservada previamente. Al ejecutarlo, pide la 
 	confirmación para la reserva y después inserta en la tabla reservas una tupla que representa a la butaca 
 	reservada. 
+	
+	
 1. Crea las tablas y secuencias para los identificadores: 
 		CREATE TABLE butacas(id number(8) primary key, 
 		 evento varchar(30), 
@@ -143,15 +146,29 @@
 		INSERT INTO butacas VALUES (Seq_Butacas.NEXTVAL,'Circo','1','3'); 
 		COMMIT; 
 3. Prueba el script desde SQL Developer reservando la fila 1, columna 1 para 'Circo'. Antes hay que 
-modificar las rutas que hacen referencia a los otros scripts a la carpeta en donde se hayan 
-depositado. 
-4. Intenta reservar de nuevo la misma fila desde la misma consola SQL Plus y comprueba que no sea 
-posible. 
-5. Realiza una nueva reserva desde la misma consola para la fila 1, columna 4 para la 'Ópera' y 
-comprueba que no es posible porque no existe esa butaca. 
-6. Realiza una nueva reserva desde la misma consola para la fila 1, columna 2 para la 'Ópera' pero sin 
-realizar aún la confirmación. 
+	modificar las rutas que hacen referencia a los otros scripts a la carpeta en donde se hayan 
+	depositado. 
+	
+		-Fila reservada.
+	
+4. Intenta reservar de nuevo la misma fila desde la misma consola SQLDeveloper y comprueba que no sea 
+	posible.
+	
+		-No es posible.
+		
+5. Realiza una nueva reserva desde la misma consola para la fila 1, columna 4 para la 'Circo' y 
+	comprueba que no es posible porque no existe esa butaca. 
+	
+		-No existe esa localidad.
+		
+6. Realiza una nueva reserva desde la misma consola para la fila 1, columna 2 para la 'Circo' pero sin 
+	realizar aún la confirmación. 
+	
 7. Abre una nueva instancia de SQL Developer y realiza la misma reserva anterior desde esta 
-instancia. Confirma la reserva. 
+	instancia. Confirma la reserva. 
+	
 8. Confirma la reserva del punto 7. ¿Qué sucede? 
+		
+		-Que se han creado dos reservas para la misma butaca.
+		
 9. Modifica el script para resolver el punto anterior. 
