@@ -15,7 +15,7 @@
 	2. Abrir dos sesiones T1 y T2 de SQLPlus con tu usuario y contraseña 
 		Nota para SQLPlus: Oracle 11g R2 cliente: Menú Inicio ? Programas ? BBDD ? Oracle ? 
 		Consola de Oracle 11g 
-		C:> sqlplus usuario@BD as psswd 
+		C:> sqlplus usuario/psswd @BDd
 	3. Deshabilitar la autoconfirmación con: 
 		SET AUTOCOMMIT OFF. 
 	4. Desde T1 aumentar 100 euros el saldo de la cuenta 123. 
@@ -113,36 +113,35 @@
 	reads', estaríamos en el mismo caso que el nivel 'Serializable' para la modificación
 	de fila, la diferencia estaría en el caso de añadir nuevas filas que en este nivel sí
 	que aparecerían.
-	
 
 5. Transacciones 
-En una central de reservas de butacas para eventos (conciertos, ópera, cine, …) se desea desarrollar 
-una aplicación para que los clientes puedan reservar butacas en estos eventos. Se proporciona un script 
-(script.sql, y que llama a otros dos: preguntar.sql y no_preguntar.sql) que consulta y 
-actualiza los datos de dos tablas. La primera, butacas(id number(8) primary key, evento 
-nvarchar(30), fila nvarchar(10), columna nvarchar(10)) contiene todas las 
-butacas disponibles de cada evento. La segunda, reservas, con el mismo esquema que butacas, 
-almacena las butacas que se han reservado. El script incluye los valores para el evento, fila y columna, 
-comprueba que la butaca existe y consulta si no está reservada previamente. Al ejecutarlo, pide la 
-confirmación para la reserva y después inserta en la tabla reservas una tupla que representa a la butaca 
-reservada. 
+	En una central de reservas de butacas para eventos (conciertos, ópera, cine, …) se desea desarrollar 
+	una aplicación para que los clientes puedan reservar butacas en estos eventos. Se proporciona un script 
+	(script.sql, y que llama a otros dos: preguntar.sql y no_preguntar.sql) que consulta y 
+	actualiza los datos de dos tablas. La primera, butacas(id number(8) primary key, evento 
+	nvarchar(30), fila nvarchar(10), columna nvarchar(10)) contiene todas las 
+	butacas disponibles de cada evento. La segunda, reservas, con el mismo esquema que butacas, 
+	almacena las butacas que se han reservado. El script incluye los valores para el evento, fila y columna, 
+	comprueba que la butaca existe y consulta si no está reservada previamente. Al ejecutarlo, pide la 
+	confirmación para la reserva y después inserta en la tabla reservas una tupla que representa a la butaca 
+	reservada. 
 1. Crea las tablas y secuencias para los identificadores: 
-CREATE TABLE butacas(id number(8) primary key, 
- evento varchar(30), 
- fila varchar(10), 
- columna varchar(10)) ; 
-CREATE TABLE reservas(id number(8) primary key, 
- evento varchar(30), 
- fila varchar(10), 
- columna varchar(10)) ; 
-CREATE SEQUENCE Seq_Butacas INCREMENT BY 1 START WITH 1 
-NOMAXVALUE; CREATE SEQUENCE Seq_Reservas INCREMENT BY 1 START WITH 1 
-NOMAXVALUE; 
+		CREATE TABLE butacas(id number(8) primary key, 
+		 evento varchar(30), 
+		 fila varchar(10), 
+		 columna varchar(10)) ; 
+		CREATE TABLE reservas(id number(8) primary key, 
+		 evento varchar(30), 
+		 fila varchar(10), 
+		 columna varchar(10)) ; 
+		CREATE SEQUENCE Seq_Butacas INCREMENT BY 1 START WITH 1 
+		NOMAXVALUE; CREATE SEQUENCE Seq_Reservas INCREMENT BY 1 START WITH 1 
+		NOMAXVALUE; 
 2. Inserta algunos valores de prueba en butacas: 
-INSERT INTO butacas VALUES (Seq_Butacas.NEXTVAL,'Circo','1','1'); 
-INSERT INTO butacas VALUES (Seq_Butacas.NEXTVAL,'Circo','1','2'); 
-INSERT INTO butacas VALUES (Seq_Butacas.NEXTVAL,'Circo','1','3'); 
-COMMIT; 
+		INSERT INTO butacas VALUES (Seq_Butacas.NEXTVAL,'Circo','1','1'); 
+		INSERT INTO butacas VALUES (Seq_Butacas.NEXTVAL,'Circo','1','2'); 
+		INSERT INTO butacas VALUES (Seq_Butacas.NEXTVAL,'Circo','1','3'); 
+		COMMIT; 
 3. Prueba el script desde SQL Developer reservando la fila 1, columna 1 para 'Circo'. Antes hay que 
 modificar las rutas que hacen referencia a los otros scripts a la carpeta en donde se hayan 
 depositado. 
