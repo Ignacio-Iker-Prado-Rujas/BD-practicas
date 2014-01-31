@@ -172,3 +172,5 @@
 		-Que se han creado dos reservas para la misma butaca.
 		
 9. Modifica el script para resolver el punto anterior. 
+	
+		-El script modificado va adjunto.
