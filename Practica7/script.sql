@@ -5,7 +5,7 @@ SET echo OFF;
 SET verify OFF;
 def v_evento='Circo';
 def v_fila='1';
-def v_columna='3';
+def v_columna='2';
 variable v_error char(20)
 /
 declare
@@ -34,12 +34,19 @@ print :v_error
 @ &SCRIPT
 prompt &v_confirmar
 /
+declare
+  v_existe varchar(20) default null;
 begin
   if '&v_confirmar'='s' and :v_error='false' then
-    insert into reservas values (Seq_Reservas.NEXTVAL,'&v_evento','&v_fila','&v_columna');
-    dbms_output.put_line('INFO: Localidad reservada.');
+	select count(*) into v_existe from reservas where evento='&v_evento' and fila='&v_fila' and columna='&v_columna';
+	if v_existe='0' then	
+		insert into reservas values (Seq_Reservas.NEXTVAL,'&v_evento','&v_fila','&v_columna');
+		dbms_output.put_line('INFO: Localidad reservada.');
+	else
+		dbms_output.put_line('ERROR: La localidad ya está reservada.');
+	end if;
   else
-    dbms_output.put_line('INFO: No se ha reservado la localidad.');
+		dbms_output.put_line('INFO: No se ha reservado la localidad.');
   end if;
 end;
 /
