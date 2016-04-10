@@ -1,0 +1,1 @@
+Prácticas de la asignatura de BD. Todo lo que aquí se encuentra esta realizado por Kike Ballesteros e Iker Prado.
