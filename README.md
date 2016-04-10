@@ -2,7 +2,7 @@
 
 This project hosts the University assignments from Databases, October 2013 - February 2014.
 
-Languages: Relational Algebra, Relational Extended Algebra, SQL, PL/SQL...
+Languages: Relational Algebra, Extended Relational Algebra, SQL, PL/SQL...
 
 Authors:
   - Enrique Ballesteros Horcajo
